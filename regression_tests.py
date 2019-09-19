@@ -89,11 +89,11 @@ class TestDiceRoller(unittest.TestCase):
         result_list = parse_roll_string('d20 + 2d6 - 4')
         sum = 0
 
-        for roll in result_list[1]:
-            self.assertLessEqual(roll, 20)
-            sum += roll
+        roll = result_list[1]
+        self.assertLessEqual(roll, 20)
+        sum += roll
 
-        for roll in result_list[1:]:
+        for roll in result_list[2:]:
             self.assertLessEqual(roll, 6)
             sum += roll
 
