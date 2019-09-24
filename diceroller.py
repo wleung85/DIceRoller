@@ -9,13 +9,15 @@ def parse_roll_string(input_str):
     operation = '+'
     sub_result = 0
     pre_num = 0
-    post_num = 0
+    post_num = -1
     sided = False           # determine if 'd' has been encountered thus counting sided-ness
 
     for index, char in enumerate(input_str):
         if char.isdigit():
             if not sided:
                 pre_num = pre_num * 10 + int(char)
+            elif post_num < 0:
+                post_num = int(char)
             else:
                 post_num = post_num * 10 + int(char)
         elif char == ' ':
@@ -26,12 +28,12 @@ def parse_roll_string(input_str):
             if pre_num == 0:
                 pre_num = 1
         if char in ['+', '-'] or index == len(input_str) - 1:
-            # TODO: if 'd' is last character and no post_num
-            # encountered new operation or end of string, finalize current operation
             if sided:
                 for i in range(pre_num):
                     if post_num == 0:
                         roll = 0
+                    elif post_num < 0:
+                        raise ValueError("Can't parse die sidedness")
                     else:
                         roll = randrange(1, post_num + 1)
                     result_list.append(roll)
@@ -47,7 +49,7 @@ def parse_roll_string(input_str):
                 operation = char
                 sub_result = 0
                 pre_num = 0
-                post_num = 0
+                post_num = -1
                 sided = False
     
     result_list[0] = result
